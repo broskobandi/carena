@@ -1,0 +1,6 @@
+.cache
+build
+doc
+compile_commands.json
+tags
+*.swp
