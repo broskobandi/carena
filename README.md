@@ -57,7 +57,6 @@ int main(void) {
 	return 0;
 }
 ```
-Compile the program using this library with the -L/usr/local/lib -lcarena flags.
 ## Todo
 - The realloc function might need a slightly more elegant and performant rework.
 - Add malloc as a fallback mechanism?
