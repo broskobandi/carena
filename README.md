@@ -20,39 +20,24 @@ make install EXTRA_CPPFLAGS=-DCARENA_SIZE_MULTIPLIER=<N>
 The library is based on a complex free list system that ensures that deallocated 
 memory regions are reusable for new allocations which is particularly useful in
 long running applications.
-## Dependencies
-### For error messages
-- [cerror](https://gitlab.com/broskobandi/cerror.git)
-### For compiling
-- gcc
-### For testing
-- clang
-- [ctest](https://gitlab.com/broskobandi/ctest.git)
-### For the documentation
-- doxygen
-## Install
+## Prerequisites
+- cmake (for building the library)
+- [ctest](https://gitlab.com/broskobandi/ctest.git) (for running the tests)
+## Installation
 ```bash
 git clone https://gitlab.com/broskobandi/carena.git &&
 cd carena &&
+mkdir build &&
+cd build &&
+cmake .. &&
 make &&
 sudo make install
 ```
-## Uninstall
-```bash
-cd carena &&
-sudo make uninstall
-```
 ## Testing
 ```bash
-cd carena &&
-make clean &&
+cd carena/build &&
 make test &&
-make clean
-```
-## Documentation
-```bash
-cd carena &&
-make doc
+./test
 ```
 ## Usage
 ```c
