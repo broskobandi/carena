@@ -55,4 +55,7 @@ void carena_free(void *ptr);
  * This function sets cerror on failure. */
 void *carena_realloc(void *ptr, size_t size);
 
+/** Return a string containing the latest error information. */
+const char *carena_get_error();
+
 #endif

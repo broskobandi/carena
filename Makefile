@@ -3,7 +3,6 @@ PROJECT := carena
 CC := gcc
 CFLAGS = -Wall -Wextra -Werror -Wconversion -Wunused-result
 CPPFLAGS = -Iinclude $(EXTRA_CPPFLAGS)
-LDFLAGS = -L/usr/local/lib -lcerror
 
 # Dirs
 BUILD_DIR := build
@@ -42,9 +41,8 @@ test: $(TEST_EXE)
 	./$<
 
 example: CC := clang
-example: LDFLAGS += -lcarena 
+example: LDFLAGS = -lcarena 
 example: $(EXAMPLE_EXE)
-	./$<
 
 clean:
 	rm -rf $(BUILD_DIR) $(DOC_DIR) compile_commands.json
@@ -70,7 +68,7 @@ $(LIB_A): $(OBJ) | $(BUILD_DIR)
 	ar rcs $@ $^
 
 $(LIB_SO): $(OBJ) | $(BUILD_DIR)
-	$(CC) -shared $(CFLAGS) $(CPPFLAGS) $^ -o $@ $(LDFLAGS)
+	$(CC) -shared $(CFLAGS) $(CPPFLAGS) $^ -o $@
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c $(INC_PRIV) $(INC) | $(OBJ_DIR)
 	$(CC) -c -fPIC $(CFLAGS) $(CPPFLAGS) $< -o $@

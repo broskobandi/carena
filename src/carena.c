@@ -28,9 +28,10 @@ SOFTWARE.
  * functions and global variables for the carena library. */
 
 #include "carena_private.h"
-#include <cerror.h>
 
 _Thread_local static arena_t g_arena;
+
+_Thread_local static const char *g_err;
 
 arena_t *get_g_arena() {
 	return &g_arena;
@@ -41,29 +42,27 @@ arena_t *get_g_arena() {
  * (the actual allocation size is larger to account for metadata and 
  * padding).
  * \return A pointer to the beginning of the allocated memory block 
- * or NULL on failure.
- * This function sets cerror on failure. */
+ * or NULL on failure. */
 void *carena_alloc(size_t size) {
 	if (SIZE_CLASS(TOTAL_SIZE(size)) >= NUM_SIZE_CLASSES) {
-		cerror_push("'size' is too big", NULL, __func__, -1);
+		g_err = "'size' is too big.";
 		return NULL;
 	} else if (g_arena.free_tails[SIZE_CLASS(TOTAL_SIZE(size))]) {
 		return use_free_list(size, &g_arena);
 	} else if (g_arena.offset + TOTAL_SIZE(size) <= ARENA_SIZE) {
 		return use_arena(size, &g_arena);
 	} else {
-		cerror_push("Arena is full.", NULL, __func__, -1);
+		g_err = "Arena is full.";
 		return NULL;
 	}
 }
 
 /** Deallocates a block of memory in the arena.
  * \param ptr A pointer to the beginning of the memory block to be
- * deallocated.
- * This function sets cerror on failure. */
+ * deallocated. */
 void carena_free(void *ptr) {
 	if (!ptr || !META(ptr)->is_valid) {
-		cerror_push("Invalid argument.", NULL, __func__, -1);
+		g_err = "Invalid argument.";
 		return;
 	}
 	if (!META(ptr)->next) {
@@ -80,13 +79,17 @@ void carena_free(void *ptr) {
  * \param ptr A pointer to the memory block to be resized. 
  * \param size The new size. 
  * \return A pointer to the new allocation (it is the same as 'ptr'
- * if the reallocation could be done in place) or NULL on failure.
- * This function sets cerror on failure. */
+ * if the reallocation could be done in place) or NULL on failure. */
 void *carena_realloc(void *ptr, size_t size) {
 	if (!ptr || !META(ptr)->is_valid) {
-		cerror_push("Invalid argument.", NULL, __func__, -1);
+		g_err = "Invalid argument.";
 		return NULL;
 	}
 	carena_free(ptr);
 	return carena_alloc(size);
+}
+
+/** Return a string containing the latest error information. */
+const char *carena_get_error() {
+	return g_err;
 }
