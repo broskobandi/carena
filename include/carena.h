@@ -32,6 +32,10 @@ SOFTWARE.
 
 #include <stddef.h> /* For size_t */
 
+#ifdef __cplusplus
+extern "C" {
+#endif
+
 /** Allocates a block of memory of 'size' number of bytes in the arena.
  * \param size The number of bytes in the arena that's owned by teh user
  * (the actual allocation size is larger to account for metadata and 
@@ -57,5 +61,9 @@ void *carena_realloc(void *ptr, size_t size);
 
 /** Return a string containing the latest error information. */
 const char *carena_get_error();
+
+#ifdef __cplusplus
+}
+#endif
 
 #endif
