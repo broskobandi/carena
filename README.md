@@ -7,25 +7,16 @@ thread-safe manner.
 ### Thread-safe
 Each thread uses its own unique arena which prevents race conditions without 
 the relying on mutex locks which aids performance.
-### Adjustable
-If the default arena size (128KB) is too small, it is possible to extend it 
-by recompiling the library with ...
-```bash
-cd carena &&
-make clean &&
-make install EXTRA_CPPFLAGS=-DCARENA_SIZE_MULTIPLIER=<N>
-```
-... where <N> is the number of times the arena size should be multiplied.
 ### Reusable
 The library is based on a complex free list system that ensures that deallocated 
 memory regions are reusable for new allocations which is particularly useful in
 long running applications.
 ## Prerequisites
 - cmake (for building the library)
-- [ctest](https://gitlab.com/broskobandi/ctest.git) (for running the tests)
+- [ctest](https://github.com/broskobandi/ctest.git) (for running the tests)
 ## Installation
 ```bash
-git clone https://gitlab.com/broskobandi/carena.git &&
+git clone https://github.com/broskobandi/carena.git &&
 cd carena &&
 mkdir build &&
 cd build &&
